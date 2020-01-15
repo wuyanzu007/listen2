@@ -62,7 +62,7 @@ class _PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
                           radius: 20),
                     ),
                     //歌曲专辑信息
-                    VerticalPlaceholder(80),
+                    VerticalPlaceholder(10),
                     Expanded(
                       // TODO 歌词可以放在此处 替换当前歌曲信息
                       child: Column(

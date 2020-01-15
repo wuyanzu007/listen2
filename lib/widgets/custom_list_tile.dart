@@ -10,7 +10,12 @@ class CustomListTile extends StatelessWidget {
   final VoidCallback onTap;
 
   const CustomListTile(
-      {Key key, this.leading, this.trailing, this.title, this.subtitle, this.onTap})
+      {Key key,
+      this.leading,
+      this.trailing,
+      this.title,
+      this.subtitle,
+      this.onTap})
       : super(key: key);
 
   @override
@@ -31,8 +36,18 @@ class CustomListTile extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(title,style: AppTheme.title,),
-                    Text(subtitle,style: AppTheme.subtitle,),
+                    Text(
+                      title,
+                      style: AppTheme.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      subtitle,
+                      style: AppTheme.subtitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ],
                 ),
               ),

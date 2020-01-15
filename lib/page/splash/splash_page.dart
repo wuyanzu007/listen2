@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:listen2/api/application.dart';
 import 'package:listen2/utils/navigator_util.dart';
@@ -45,6 +46,9 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     Application.screenWidth = size.width;
     Application.screenHeight = size.height;
     Application.statusBarHeight = MediaQuery.of(context).padding.top;
+
+    ScreenUtil.init(context, width: 750, height: 1334, allowFontScaling: true);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(

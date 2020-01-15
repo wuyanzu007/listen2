@@ -6,6 +6,7 @@ import 'package:listen2/api/response/qq/qq_get_play_list_music_response.dart';
 import 'package:listen2/api/response/qq/qq_get_play_list_response.dart';
 import 'package:listen2/api/response/qq/qq_get_play_url_response.dart';
 import 'package:listen2/api/response/qq/qq_hot_search_response.dart';
+import 'package:listen2/api/response/qq/qq_search_response.dart';
 import 'package:listen2/common/enums.dart';
 import 'package:listen2/models/album_model.dart';
 import 'package:listen2/models/music_model.dart';
@@ -60,15 +61,22 @@ class QQApi extends AbstractPlatform {
     String songId = param.id ?? "1404906595";
     String url = await _getPlayUrl(songId);
     param.playUrl = url;
-    param.picUrl = "http://imgcache.qq.com/music/photo/mid_album_300/" +
+    param.picUrl = _getPicUrl(param);
+    LogUtil.e(param.picUrl);
+    return param;
+  }
+
+  String _getPicUrl(MusicModel param) {
+    if (param == null || param.album == null || param.album.id.isEmpty) {
+      return "";
+    }
+    return "http://imgcache.qq.com/music/photo/mid_album_300/" +
         param.album.id[param.album.id.length - 2] +
         "/" +
         param.album.id[param.album.id.length - 1] +
         "/" +
         param.album.id +
         ".jpg";
-    LogUtil.e(param.picUrl);
-    return param;
   }
 
   Future<String> _getPlayUrl(String songId) async {
@@ -98,7 +106,6 @@ class QQApi extends AbstractPlatform {
       return url;
     }
     url += "?";
-    // 末尾&符号不影响正常访问
     paramMap.forEach(
         (key, v) => {url = url + key.toString() + "=" + v.toString() + "&"});
     return url;
@@ -199,8 +206,63 @@ class QQApi extends AbstractPlatform {
   }
 
   @override
-  Future<List<MusicModel>> search({Map<String, dynamic> queryParameters}) {
-    // TODO: implement search
-    return null;
+  Future<List<MusicModel>> search(
+      {Map<String, dynamic> queryParameters}) async {
+    String keywords = queryParameters["queryStr"] ?? "";
+    int currentPage = queryParameters["currentPage"] ?? 1;
+    String url = "http://i.y.qq.com/s.music/fcgi-bin/search_for_qq_cp";
+    var param = {
+      "g_tk": 938407465,
+      "uin": 0,
+      "format": "jsonp",
+      "inCharset": "utf-8",
+      "outCharset": "utf-8",
+      "notice": 0,
+      "platform": "h5",
+      "needNewCode": 1,
+      "w": keywords,
+      "zhidaqu": 1,
+      "catZhida": 1,
+      "t": 0,
+      "flag": 1,
+      "ie": "utf-8",
+      "sem": 1,
+      "aggr": 0,
+      "perpage": 20,
+      "n": 20,
+      "p": currentPage,
+      "remoteplace": "txt.mqq.all",
+      "_": "1459991037831",
+      "jsonpCallback": "jsonp4"
+    };
+    var response = await _dio.get(url,
+        queryParameters: param,
+        options: Options(headers: {
+          "referer": "https://y.qq.com",
+        }));
+    var responseJson = response
+        .toString()
+        .substring("jsonp4(".length, response.toString().length - 1);
+    var qqSearchResponse =
+        QQSearchResponse.fromJson(json.decode(responseJson.toString()));
+    List<MusicModel> musicModelList = List();
+    for (var song in qqSearchResponse.data.song.list) {
+      var musicModel = MusicModel(
+          id: song.songmid,
+          name: song.songname,
+          platform: PlatformsEnum.QQ,
+          album: AlbumModel(
+              id: song.albummid,
+              name: song.albumname,
+              platform: PlatformsEnum.QQ),
+          singer: SingerModel(
+              id: song.singer[0].mid,
+              name: song.singer[0].name,
+              platform: PlatformsEnum.QQ));
+      String picUrl = _getPicUrl(musicModel);
+      musicModel.picUrl = picUrl;
+      musicModelList.add(musicModel);
+    }
+    return musicModelList;
   }
 }

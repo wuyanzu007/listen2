@@ -87,7 +87,7 @@ class _PlayListPageState extends State<PlayListPage>
               slivers: <Widget>[
                 SliverGrid(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3, childAspectRatio: 0.75),
+                      crossAxisCount: 3, childAspectRatio: 3 / 4),
                   delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
                     final int count = playListModelList.length;

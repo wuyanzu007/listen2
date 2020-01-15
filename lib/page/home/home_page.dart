@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:listen2/app_theme.dart';
 import 'package:listen2/common/enums.dart';
 import 'package:listen2/page/play_list/play_list_page.dart';
@@ -77,7 +78,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             bottom: 0,
             left: 0,
             child: PlayingMusicTool(
-              height: 50,
+              height: ScreenUtil().setHeight(100),
             ),
           )
         ],

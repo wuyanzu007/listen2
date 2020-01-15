@@ -6,9 +6,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:html/parser.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:listen2/api/abstract_platform.dart';
+import 'package:listen2/api/response/netease/netease_get_hot_search_response.dart';
 import 'package:listen2/api/response/netease/netease_get_music_detail_response.dart';
 import 'package:listen2/api/response/netease/netease_get_music_url_response.dart';
 import 'package:listen2/api/response/netease/netease_get_music_list_detail_response.dart';
+import 'package:listen2/api/response/netease/netease_search_response.dart';
 import 'package:listen2/common/enums.dart';
 import 'package:listen2/models/album_model.dart';
 import 'package:listen2/models/music_model.dart';
@@ -37,11 +39,29 @@ class NeteaseApi extends AbstractPlatform {
 
   @override
   Future<List<String>> getHotSearch(
-      {Map<String, dynamic> queryParameters, refresh = false}) {
-
-
-
-    return null;
+      {Map<String, dynamic> queryParameters}) async {
+    String url = "https://music.163.com/weapi/search/hot";
+    var paramData = {"type": 1111};
+    const channel = const MethodChannel("com.wuyanzu007.listen2/encrypt");
+    Map result = await channel
+        .invokeMethod("encryptNeteaseParam", {"param": json.encode(paramData)});
+    var response = await _dio.post(url,
+        queryParameters: {
+          "params": result["params"],
+          "encSecKey": result["encSecKey"]
+        },
+        options: new Options(
+            headers: {"Content-Type": "application/x-www-form-urlencoded"}));
+    var neteaseGetHotSearchResponse =
+        NeteaseGetHotSearchResponse.fromJson(json.decode(response.toString()));
+    List<String> hotSearch = List();
+    if (neteaseGetHotSearchResponse != null &&
+        neteaseGetHotSearchResponse.result != null &&
+        neteaseGetHotSearchResponse.result.hots != null) {
+      neteaseGetHotSearchResponse.result.hots
+          .forEach((hot) => hotSearch.add(hot.first));
+    }
+    return hotSearch;
   }
 
   @override
@@ -180,8 +200,41 @@ class NeteaseApi extends AbstractPlatform {
 
   @override
   Future<List<MusicModel>> search(
-      {Map<String, dynamic> queryParameters, refresh = false}) {
-    // TODO: implement search
-    return null;
+      {Map<String, dynamic> queryParameters}) async {
+    String keywords = queryParameters["queryStr"] ?? "";
+    int currentPage = queryParameters["currentPage"] ?? 1;
+    String url = "http://music.163.com/api/search/pc";
+    var reqData = {
+      "s": keywords,
+      "offset": 20 * (currentPage - 1),
+      "limit": 20,
+      "type": 1
+    };
+    var response = await _dio.post(url, queryParameters: reqData);
+    NeteaseSearchResponse neteaseSearchResponse =
+        NeteaseSearchResponse.fromJson(json.decode(response.toString()));
+    List<MusicModel> musicModelList = new List();
+    if (neteaseSearchResponse != null &&
+        neteaseSearchResponse.result != null &&
+        neteaseSearchResponse.result.songs != null) {
+      neteaseSearchResponse.result.songs.forEach((song) => {
+            musicModelList.add(MusicModel(
+                id: song.id.toString(),
+                name: song.name,
+                platform: PlatformsEnum.NETEASE,
+                picUrl: song.album.picUrl,
+                album: AlbumModel(
+                    id: song.album.id.toString(),
+                    name: song.album.name,
+                    picUrl: song.album.picUrl,
+                    platform: PlatformsEnum.NETEASE),
+                singer: SingerModel(
+                    id: song.artists[0].id.toString(),
+                    name: song.artists[0].name,
+                    iconUrl: song.artists[0].picUrl,
+                    platform: PlatformsEnum.NETEASE)))
+          });
+    }
+    return musicModelList;
   }
 }

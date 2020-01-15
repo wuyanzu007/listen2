@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:listen2/api/abstract_platform.dart';
@@ -96,12 +97,12 @@ class _PlayListMusicPageState extends State<PlayListMusicPage> {
           slivers: <Widget>[
             PlayListMusicSliverAppBar(
               title: widget.playListModel.title,
-              expandedHeight: 350,
+              expandedHeight: ScreenUtil().setHeight(700),
               sigma: 20,
               backgroundImg: widget.playListModel.imageUrl,
               content: Padding(
                 padding: EdgeInsets.only(
-                    bottom: 60,
+                    bottom: ScreenUtil().setHeight(60),
                     top: kToolbarHeight + MediaQuery.of(context).padding.top),
                 child: Container(
                   //TODO 歌单歌曲列表样式调整
@@ -275,7 +276,7 @@ class PlayListMusicSliverAppBarBottom extends StatefulWidget
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => Size.fromHeight(60);
+  Size get preferredSize => Size.fromHeight(ScreenUtil().setHeight(100));
 }
 
 class _PlayListMusicSliverAppBarBottomState

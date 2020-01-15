@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:listen2/models/play_list_model.dart';
 import 'package:listen2/widgets/rounded_net_image.dart';
 
@@ -34,7 +35,7 @@ class PlayListGridItemWidget extends StatelessWidget {
                     splashColor: Colors.transparent,
                     onTap: onTap,
                     child: Padding(
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -48,7 +49,9 @@ class PlayListGridItemWidget extends StatelessWidget {
                             radius: 10.0,
                           ),
                           Container(
-                            height: 40,
+                            height: constraints.maxHeight -
+                                constraints.maxWidth -
+                                5,
                             child: Padding(
                               padding: EdgeInsets.only(top: 5),
                               child: Text(

@@ -1,3 +1,4 @@
+import 'package:listen2/api/bi_li_bi_li_api.dart';
 import 'package:listen2/api/mi_gu_api.dart';
 import 'package:listen2/api/netease_api.dart';
 import 'package:listen2/api/qq_api.dart';
@@ -49,7 +50,7 @@ abstract class AbstractPlatform {
         break;
       case PlatformsEnum.BI_LI_BI_LI:
         // TODO: Handle this case.
-        return null;
+        return BiLiBiLiApi();
         break;
     }
     return null;

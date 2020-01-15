@@ -278,23 +278,20 @@ class MiGuApi extends AbstractPlatform {
     var searchResult = MiGuSearchResponse.fromJson(response.data);
     if (searchResult != null && searchResult.musics != null) {
       searchResult.musics.forEach((music) {
-        SingerModel singerModel = new SingerModel(
-            name: music.singerName,
-            id: music.singerId,
-            platform: PlatformsEnum.MI_GU);
-        AlbumModel albumModel = new AlbumModel(
-            name: music.albumName,
-            id: music.albumId,
-            platform: PlatformsEnum.MI_GU);
-        MusicModel musicModel = new MusicModel(
+        list.add(MusicModel(
             id: music.copyrightId,
             picUrl: music.cover,
             playUrl: music.mp3,
             name: music.title,
             platform: PlatformsEnum.MI_GU,
-            singer: singerModel,
-            album: albumModel);
-        list.add(musicModel);
+            singer: SingerModel(
+                name: music.singerName,
+                id: music.singerId,
+                platform: PlatformsEnum.MI_GU),
+            album: AlbumModel(
+                name: music.albumName,
+                id: music.albumId,
+                platform: PlatformsEnum.MI_GU)));
       });
     }
     return list;

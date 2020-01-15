@@ -38,13 +38,17 @@ class _MarqueeState extends State<Marquee> {
   void scroll() async {
     while (true) {
       await Future.delayed(widget.pauseDuration);
-      await scrollController.animateTo(
-          scrollController.position.maxScrollExtent,
-          duration: widget.animationDuration,
-          curve: Curves.easeIn);
+      if(scrollController.hasClients){
+        await scrollController.animateTo(
+            scrollController.position.maxScrollExtent,
+            duration: widget.animationDuration,
+            curve: Curves.easeIn);
+      }
       await Future.delayed(widget.pauseDuration);
-      await scrollController.animateTo(0.0,
-          duration: widget.backDuration, curve: Curves.easeOut);
+      if(scrollController.hasClients){
+        await scrollController.animateTo(0.0,
+            duration: widget.backDuration, curve: Curves.easeOut);
+      }
     }
   }
 

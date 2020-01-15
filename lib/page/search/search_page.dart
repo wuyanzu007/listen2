@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:listen2/api/abstract_platform.dart';
 import 'package:listen2/api/application.dart';
@@ -23,6 +24,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   AnimationController iconAnimationController;
   TextEditingController textEditingController;
   AbstractPlatform api;
+  Future hotSearchFuture;
 
   List<String> searchHistory = [];
   List<String> hotSearch = [];
@@ -43,12 +45,12 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   }
 
   void getHotSearch() {
-    api
-        .getHotSearch()
-        .then((result) => setState(() {
-              hotSearch = result;
-            }))
-        .catchError((error) => Fluttertoast.showToast(msg: "获取排行榜信息时发生错误"));
+    setState(() {
+      hotSearchFuture = api.getHotSearch();
+      hotSearchFuture
+          .then((result) => hotSearch = result)
+          .catchError((error) => Fluttertoast.showToast(msg: "获取排行榜信息时发生错误"));
+    });
   }
 
   void getHistory() {
@@ -138,7 +140,20 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
           SliverToBoxAdapter(
             child: VerticalPlaceholder(10),
           ),
-          _hotSearchWidget()
+          FutureBuilder(
+            future: hotSearchFuture,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                return _hotSearchWidget();
+              } else {
+                return SliverToBoxAdapter(
+                  child: SpinKitCircle(
+                    color: AppTheme.nearlyBlack,
+                  ),
+                );
+              }
+            },
+          )
         ]),
       ),
     );
@@ -180,7 +195,9 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                       child: RaisedButton(
                         child: Text(text),
-                        onPressed: () {},
+                        onPressed: () {
+                          search(text);
+                        },
                       ),
                     ),
                   ))
