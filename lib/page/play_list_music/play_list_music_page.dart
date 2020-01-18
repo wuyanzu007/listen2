@@ -97,7 +97,7 @@ class _PlayListMusicPageState extends State<PlayListMusicPage> {
           slivers: <Widget>[
             PlayListMusicSliverAppBar(
               title: widget.playListModel.title,
-              expandedHeight: ScreenUtil().setHeight(700),
+              expandedHeight: ScreenUtil().setHeight(600),
               sigma: 20,
               backgroundImg: widget.playListModel.imageUrl,
               content: Padding(
@@ -125,32 +125,38 @@ class _PlayListMusicPageState extends State<PlayListMusicPage> {
                       ),
                       Expanded(
                         flex: 1,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: Column(
-                            children: <Widget>[
-                              Expanded(
-                                flex: 1,
-                                child: Text(
-                                  widget.playListModel.title,
-                                  style: TextStyle(
-                                      color: AppTheme.nearlyWhite,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                        child: LayoutBuilder(
+                          builder: (context,constraints) {
+                            return Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              height: constraints.maxWidth - 10,
+                              width: constraints.maxWidth - 10,
+                              child: Column(
                                 children: <Widget>[
-                                  buildButtonColumn(Icons.comment, "评论"),
-                                  buildButtonColumn(Icons.share, "分享"),
-                                  buildButtonColumn(Icons.file_download, "下载"),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Text(
+                                      widget.playListModel.title,
+                                      style: TextStyle(
+                                          color: AppTheme.nearlyWhite,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      buildButtonColumn(Icons.comment, "评论"),
+                                      buildButtonColumn(Icons.share, "分享"),
+                                      buildButtonColumn(Icons.file_download, "下载"),
+                                    ],
+                                  )
                                 ],
-                              )
-                            ],
-                          ),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ],
@@ -276,7 +282,7 @@ class PlayListMusicSliverAppBarBottom extends StatefulWidget
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => Size.fromHeight(ScreenUtil().setHeight(100));
+  Size get preferredSize => Size.fromHeight(ScreenUtil().setHeight(80));
 }
 
 class _PlayListMusicSliverAppBarBottomState

@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             bottom: 0,
             left: 0,
             child: PlayingMusicTool(
-              height: ScreenUtil().setHeight(100),
+              height: ScreenUtil().setHeight(80),
             ),
           )
         ],

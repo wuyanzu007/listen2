@@ -16,6 +16,7 @@ import 'package:listen2/models/album_model.dart';
 import 'package:listen2/models/music_model.dart';
 import 'package:listen2/models/play_list_model.dart';
 import 'package:listen2/models/singer_model.dart';
+import 'package:listen2/utils/netease_util.dart';
 
 class NeteaseApi extends AbstractPlatform {
   Options _options;
@@ -42,9 +43,7 @@ class NeteaseApi extends AbstractPlatform {
       {Map<String, dynamic> queryParameters}) async {
     String url = "https://music.163.com/weapi/search/hot";
     var paramData = {"type": 1111};
-    const channel = const MethodChannel("com.wuyanzu007.listen2/encrypt");
-    Map result = await channel
-        .invokeMethod("encryptNeteaseParam", {"param": json.encode(paramData)});
+    var result = await NeteaseUtil.encryptWebApiParam(json.encode(paramData));
     var response = await _dio.post(url,
         queryParameters: {
           "params": result["params"],
@@ -107,9 +106,7 @@ class NeteaseApi extends AbstractPlatform {
       "csrf_token": ""
     };
     String jsonParam = json.encode(param);
-    const channel = const MethodChannel("com.wuyanzu007.listen2/encrypt");
-    Map result =
-        await channel.invokeMethod("encryptNeteaseParam", {"param": jsonParam});
+    var result = await NeteaseUtil.encryptWebApiParam(jsonParam);
     var response = await _dio.post(url,
         queryParameters: {
           "params": result["params"],
@@ -117,6 +114,7 @@ class NeteaseApi extends AbstractPlatform {
         },
         options: new Options(
             headers: {"Content-Type": "application/x-www-form-urlencoded"}));
+
 
     var getMusicListDetailResult = NeteaseGetMusicListDetailResponse.fromJson(
         json.decode(response.toString()));
@@ -147,9 +145,9 @@ class NeteaseApi extends AbstractPlatform {
     String url = "https://music.163.com/weapi/v3/song/detail?csrf_token=";
     var paramMap = {"c": '[{"id":$songId}]', "ids": "[$songId]"};
     String jsonParam = json.encode(paramMap);
-    const channel = const MethodChannel("com.wuyanzu007.listen2/encrypt");
-    Map result =
-        await channel.invokeMethod("encryptNeteaseParam", {"param": jsonParam});
+
+    var result = await NeteaseUtil.encryptWebApiParam(jsonParam);
+
     var response = await _dio.post(url,
         queryParameters: {
           "params": result["params"],
@@ -180,9 +178,7 @@ class NeteaseApi extends AbstractPlatform {
       "csrf_token": ""
     };
     String jsonParam = json.encode(param);
-    const channel = const MethodChannel("com.wuyanzu007.listen2/encrypt");
-    Map result =
-        await channel.invokeMethod("encryptNeteaseParam", {"param": jsonParam});
+    var result = await NeteaseUtil.encryptWebApiParam(jsonParam);
     var response = await _dio.post(url,
         queryParameters: {
           "params": result["params"],

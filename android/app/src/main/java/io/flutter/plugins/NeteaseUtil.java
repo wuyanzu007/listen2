@@ -15,6 +15,11 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+
+/**
+ * 使用dart实现，参见 lib/utils/netease_util.dart
+ */
+@Deprecated
 public class NeteaseUtil {
 
     private static String createSecretKey(int size) {

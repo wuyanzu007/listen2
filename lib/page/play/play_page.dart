@@ -18,7 +18,6 @@ class PlayPage extends StatefulWidget {
 }
 
 class _PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
-
   @override
   void initState() {
     super.initState();
@@ -64,7 +63,6 @@ class _PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
                     //歌曲专辑信息
                     VerticalPlaceholder(10),
                     Expanded(
-                      // TODO 歌词可以放在此处 替换当前歌曲信息
                       child: Column(
                         children: <Widget>[
                           Marquee(
@@ -88,6 +86,15 @@ class _PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
+                          // TODO 歌词可以放在此处
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                "歌词功能完善中",
+                                style: TextStyle(color: AppTheme.nearlyBlack),
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ),

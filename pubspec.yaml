@@ -22,6 +22,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   flutter_swiper: ^1.1.6
   dio: ^3.0.2
+  dio_http_cache: ^0.2.5
   provider: ^3.1.0+1
   shared_preferences: ^0.5.4+3
   fluro: ^1.5.1
@@ -31,7 +32,7 @@ dependencies:
   extended_image: ^0.6.5
   get_it: ^3.0.1
   html: ^0.14.0+3
-  json_annotation: ^2.2.0
+  json_annotation: ^3.0.0
   flutter_spinkit: ^4.0.0
   encrypt: ^3.3.1
   pointycastle: ^1.0.1
@@ -43,9 +44,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  json_model: ^0.0.2
   build_runner: ^1.0.0
-  json_serializable: ^2.0.0
+  json_serializable: ^3.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
