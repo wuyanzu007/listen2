@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:listen2/api/application.dart';
 import 'package:listen2/app_theme.dart';
 import 'package:listen2/page/splash/splash_page.dart';
+import 'package:listen2/provider/my_paly_list_provider.dart';
 import 'package:listen2/provider/play_musics_provider.dart';
 import 'package:listen2/provider/search_provider.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,9 @@ void main() {
           ),
           ChangeNotifierProvider<SearchProvider>(
             create: (_) => SearchProvider()..init(),
+          ),
+          ChangeNotifierProvider<MyPlayListProvider>(
+            create: (_) => MyPlayListProvider()..init(),
           )
         ],
         child: MyApp(),

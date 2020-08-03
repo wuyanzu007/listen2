@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:listen2/app_theme.dart';
 import 'package:listen2/page/play/play_music_action_bar.dart';
 import 'package:listen2/page/play/play_music_progress.dart';

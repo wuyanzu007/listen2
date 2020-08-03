@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:listen2/models/play_list_model.dart';
 import 'package:listen2/widgets/rounded_net_image.dart';
 

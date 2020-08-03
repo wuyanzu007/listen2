@@ -26,9 +26,7 @@ class NavigatorUtil {
   }
 
   static void goPlayListMusicPage(BuildContext context,
-      {@required PlayListModel playListModel,
-      @required PlatformsEnum platform}) {
-    playListModel.platform = platform;
+      {@required PlayListModel playListModel}) {
     _navigateTo(context,
         "${Routes.playListMusic}?playList=${FluroConvertUtils.object2string(playListModel)}");
   }
@@ -43,6 +41,7 @@ class NavigatorUtil {
 
   static void goSearchResultPage(BuildContext context,
       {@required String keywords}) {
-    _navigateTo(context, "${Routes.searchResult}?keywords=${Uri.encodeComponent(keywords)}");
+    _navigateTo(context,
+        "${Routes.searchResult}?keywords=${Uri.encodeComponent(keywords)}");
   }
 }

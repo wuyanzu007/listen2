@@ -4,6 +4,7 @@ import 'package:listen2/app_theme.dart';
 import 'package:listen2/common/enums.dart';
 import 'package:listen2/page/play_list/play_list_page.dart';
 import 'package:listen2/utils/navigator_util.dart';
+import 'package:listen2/widgets/custom_icon_button.dart';
 import 'package:listen2/widgets/custom_scaffold.dart';
 import 'package:listen2/widgets/playing_music_tool.dart';
 
@@ -46,12 +47,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             color: AppTheme.darkText,
             fontWeight: FontWeight.w700),
       ),
-      action: InkWell(
-        borderRadius: BorderRadius.circular(AppBar().preferredSize.height),
-        child: Icon(
-          Icons.search,
-          color: Colors.grey,
-        ),
+      action: CustomIconButton(
+        icon: Icons.search,
+        color: Colors.grey,
+        size: 30,
+        wrapSize: AppBar().preferredSize.height - 8,
         onTap: () {
           NavigatorUtil.goSearchPage(context);
         },

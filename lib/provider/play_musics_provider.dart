@@ -68,7 +68,6 @@ class PlayMusicsProvider with ChangeNotifier {
 
   //添加音乐到列表
   void addMusic(MusicModel musicModel) {
-    stop();
     _musicList.remove(musicModel);
     _musicList.insert(0, musicModel);
     _playQueue.remove(musicModel);
@@ -78,7 +77,6 @@ class PlayMusicsProvider with ChangeNotifier {
 
   //添加多个音乐
   void addMusics(List<MusicModel> musicList) {
-    stop();
     this._musicList = musicList;
     _playQueue.clear();
     switch (_playModel) {
@@ -100,7 +98,7 @@ class PlayMusicsProvider with ChangeNotifier {
   }
 
   // 播放
-  void play() {
+  void play() async {
     // 播放列表为空
     if (_playQueue.isEmpty) {
       Fluttertoast.showToast(
@@ -117,11 +115,11 @@ class PlayMusicsProvider with ChangeNotifier {
           _musicList.remove(_playQueue.first);
           return nextPlay();
         } else {
-          _audioPlayer.play(_playQueue.first.playUrl);
+          await _audioPlayer.play(_playQueue.first.playUrl);
         }
       });
     } else {
-      _audioPlayer.play(_playQueue.first.playUrl);
+      await _audioPlayer.play(_playQueue.first.playUrl);
     }
   }
 
@@ -134,7 +132,6 @@ class PlayMusicsProvider with ChangeNotifier {
 
   // 播放指定位置的音乐
   void playIndex(int index) {
-    stop();
     _playQueue.remove(_musicList[index]);
     _playQueue.addFirst(_musicList[index]);
     play();
@@ -155,7 +152,7 @@ class PlayMusicsProvider with ChangeNotifier {
 
   // 下一首
   void nextPlay() {
-    stop();
+    // TODO 连续的切换音乐会发生异常,不影响程序运行,但暂未发现解决方法
     var first = _playQueue.removeFirst();
     _playQueue.addLast(first);
     play();
@@ -163,7 +160,6 @@ class PlayMusicsProvider with ChangeNotifier {
 
   //上一首
   void prePlay() {
-    stop();
     var last = _playQueue.removeLast();
     _playQueue.addFirst(last);
     play();
@@ -180,18 +176,18 @@ class PlayMusicsProvider with ChangeNotifier {
     }
   }
 
-  void stop() {
-    _audioPlayer.stop();
+  void stop() async {
+    await _audioPlayer.stop();
   }
 
   // 暂停
-  void pausePlay() {
-    _audioPlayer.pause();
+  void pausePlay() async {
+    await _audioPlayer.pause();
   }
 
   // 恢复播放
-  void resumePlay() {
-    _audioPlayer.resume();
+  void resumePlay() async {
+    await _audioPlayer.resume();
   }
 
   @override

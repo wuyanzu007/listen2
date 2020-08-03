@@ -105,8 +105,7 @@ class _PlayListPageState extends State<PlayListPage>
                       animationController: animationController,
                       onTap: () {
                         NavigatorUtil.goPlayListMusicPage(context,
-                            playListModel: playListModelList[index],
-                            platform: widget.platforms);
+                            playListModel: playListModelList[index]);
                       },
                       playListModel: playListModelList[index],
                     );

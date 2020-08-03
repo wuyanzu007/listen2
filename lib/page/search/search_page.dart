@@ -93,12 +93,15 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
       backgroundColor: AppTheme.nearlyWhite,
       action: Consumer<SearchProvider>(
         builder: (BuildContext context, SearchProvider provider, Widget child) {
+          List<PlatformsEnum> searchPlatforms = List<PlatformsEnum>.from(PlatformsEnum.values);
+          //搜索不支持哔哩哔哩
+          searchPlatforms.remove(PlatformsEnum.BI_LI_BI_LI);
           return Row(
             children: <Widget>[
               DropdownButton(
                 value: provider.platforms,
                 underline: Container(),
-                items: PlatformsEnum.values
+                items: searchPlatforms
                     .map((platforms) => DropdownMenuItem<PlatformsEnum>(
                           key: Key(platforms.name),
                           value: platforms,

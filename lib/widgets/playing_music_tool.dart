@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:listen2/app_theme.dart';
+import 'package:listen2/page/play/current_play_list.dart';
 import 'package:listen2/provider/play_musics_provider.dart';
 import 'package:listen2/utils/navigator_util.dart';
 import 'package:listen2/widgets/rounded_net_image.dart';
@@ -110,7 +111,7 @@ class _PlayingMusicToolState extends State<PlayingMusicTool> {
                                       context: context,
                                       builder: (BuildContext context) {
                                         //TODO 当前播放列表
-                                        return Container();
+                                        return CurrentPlayList();
                                       });
                                 },
                               ),

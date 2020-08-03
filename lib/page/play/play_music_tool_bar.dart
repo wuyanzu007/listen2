@@ -1,5 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:listen2/page/play/current_play_list.dart';
 import 'package:listen2/provider/play_musics_provider.dart';
 import 'package:listen2/widgets/custom_icon_button.dart';
 import 'package:provider/provider.dart';
@@ -77,6 +78,13 @@ class _PlayMusicToolBarState extends State<PlayMusicToolBar> {
           wrapSize: 50,
           onTap: () {
             //TODO 播放列表
+            showModalBottomSheet(
+                elevation: 500,
+                context: context,
+                builder: (BuildContext context) {
+                  //TODO 当前播放列表
+                  return CurrentPlayList();
+                });
           },
         ),
       ],

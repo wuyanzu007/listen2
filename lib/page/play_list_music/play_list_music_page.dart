@@ -10,9 +10,11 @@ import 'package:listen2/api/abstract_platform.dart';
 import 'package:listen2/app_theme.dart';
 import 'package:listen2/models/music_model.dart';
 import 'package:listen2/models/play_list_model.dart';
+import 'package:listen2/provider/my_paly_list_provider.dart';
 import 'package:listen2/provider/play_musics_provider.dart';
 import 'package:listen2/utils/navigator_util.dart';
 import 'package:listen2/widgets/flexible_detail_bar.dart';
+import 'package:listen2/widgets/placeholder.dart';
 import 'package:listen2/widgets/rounded_net_image.dart';
 import 'package:provider/provider.dart';
 
@@ -42,20 +44,26 @@ class _InheritedMusicListFuture extends InheritedWidget {
 }
 
 class _PlayListMusicPageState extends State<PlayListMusicPage> {
-  AbstractPlatform api;
-  Future<List<MusicModel>> musicListFuture;
+  AbstractPlatform _api;
+  Future<List<MusicModel>> _musicListFuture;
+  MyPlayListProvider _myPlayListProvider;
 
   @override
   void initState() {
-    api = AbstractPlatform.getPlatform(widget.playListModel.platform);
-    musicListFuture = getData();
+    _api = AbstractPlatform.getPlatform(widget.playListModel.platform);
+    _myPlayListProvider =
+        Provider.of<MyPlayListProvider>(context, listen: false);
+    _musicListFuture = getData();
     super.initState();
   }
 
   Future<List<MusicModel>> getData() async {
     Map<String, dynamic> paramMap = new Map();
     paramMap["playListId"] = widget.playListModel.id;
-    return api.getPlayListMusic(queryParameters: paramMap);
+    if (widget.playListModel.platform == null) {
+      return widget.playListModel.musicList;
+    }
+    return _api.getPlayListMusic(queryParameters: paramMap);
   }
 
   Widget buildButtonColumn(IconData icon, String label) {
@@ -92,7 +100,7 @@ class _PlayListMusicPageState extends State<PlayListMusicPage> {
   Widget build(BuildContext context) {
     return Material(
       child: _InheritedMusicListFuture(
-        musicListFuture: musicListFuture,
+        musicListFuture: _musicListFuture,
         child: CustomScrollView(
           slivers: <Widget>[
             PlayListMusicSliverAppBar(
@@ -126,7 +134,7 @@ class _PlayListMusicPageState extends State<PlayListMusicPage> {
                       Expanded(
                         flex: 1,
                         child: LayoutBuilder(
-                          builder: (context,constraints) {
+                          builder: (context, constraints) {
                             return Container(
                               padding: EdgeInsets.symmetric(horizontal: 10),
                               height: constraints.maxWidth - 10,
@@ -146,11 +154,12 @@ class _PlayListMusicPageState extends State<PlayListMusicPage> {
                                   Row(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       buildButtonColumn(Icons.comment, "评论"),
                                       buildButtonColumn(Icons.share, "分享"),
-                                      buildButtonColumn(Icons.file_download, "下载"),
+                                      buildButtonColumn(
+                                          Icons.file_download, "下载"),
                                     ],
                                   )
                                 ],
@@ -165,7 +174,7 @@ class _PlayListMusicPageState extends State<PlayListMusicPage> {
               ),
             ),
             FutureBuilder(
-              future: musicListFuture,
+              future: _musicListFuture,
               builder: (BuildContext context,
                   AsyncSnapshot<List<MusicModel>> snapshot) {
                 if (!snapshot.hasData) {
@@ -193,7 +202,55 @@ class _PlayListMusicPageState extends State<PlayListMusicPage> {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  trailing: Icon(Icons.more_vert),
+                                  trailing: PopupMenuButton(
+                                    padding: const EdgeInsets.all(0),
+                                    icon: Icon(Icons.more_vert),
+                                    onSelected: (value) {
+                                      switch (value) {
+                                        case 1:
+                                          //播放
+                                          provider.addMusic(music);
+                                          break;
+                                        case 2:
+                                          //删除
+                                          setState(() {
+                                            _myPlayListProvider.deleteMusic(
+                                                widget.playListModel.title, music);
+                                          });
+                                          break;
+                                      }
+                                    },
+                                    itemBuilder: (BuildContext context) {
+                                      return <PopupMenuEntry>[
+                                        PopupMenuItem(
+                                          value: 1,
+                                          child: Center(
+                                            child: Row(
+                                              children: <Widget>[
+                                                Icon(Icons.play_arrow),
+                                                HorizontalPlaceholder(10),
+                                                Text("播放")
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        widget.playListModel.platform == null
+                                            ? PopupMenuItem(
+                                                value: 2,
+                                                child: Center(
+                                                  child: Row(
+                                                    children: <Widget>[
+                                                      Icon(Icons.delete),
+                                                      HorizontalPlaceholder(10),
+                                                      Text("删除")
+                                                    ],
+                                                  ),
+                                                ),
+                                              )
+                                            : null,
+                                      ];
+                                    },
+                                  ),
                                   subtitle: Text(
                                     music.singer.name + music.album.name,
                                     style: AppTheme.subtitle,

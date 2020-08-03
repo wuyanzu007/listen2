@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:listen2/app_theme.dart';
+import 'package:listen2/page/about/about_page.dart';
 import 'package:listen2/page/drawer/drawer_user_controller.dart';
 import 'package:listen2/page/drawer/home_drawer.dart';
+import 'package:listen2/page/help/help_page.dar.dart';
 import 'package:listen2/page/home/home_page.dart';
+import 'package:listen2/page/my_play_list/my_play_list_page.dart';
+import 'package:listen2/page/share/share_page.dart';
 
 class NavigationHomeScreen extends StatefulWidget {
   @override
@@ -32,7 +36,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
           backgroundColor: AppTheme.nearlyWhite,
           body: DrawerUserController(
             screenMenu: drawerMenu,
-            drawerWidth: MediaQuery.of(context).size.width * 0.75,
+            drawerWidth: (MediaQuery.of(context).size.width * 0.75).toInt(),
             animationController: (AnimationController animationController) {
               sliderAnimationController = animationController;
             },
@@ -49,24 +53,32 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
   void changeIndex(DrawerMenu drawerMenuData) {
     if (drawerMenu != drawerMenuData) {
       drawerMenu = drawerMenuData;
-      if (drawerMenu == DrawerMenu.HOME) {
-        setState(() {
-          screenView = const HomePage();
-        });
-      } else if (drawerMenu == DrawerMenu.Help) {
-        setState(() {
-          screenView = const HomePage();
-        });
-      } else if (drawerMenu == DrawerMenu.FeedBack) {
-        setState(() {
-          screenView = const HomePage();
-        });
-      } else if (drawerMenu == DrawerMenu.About) {
-        setState(() {
-          screenView = const HomePage();
-        });
-      } else {
-        //do in your way......
+      switch (drawerMenu) {
+        case DrawerMenu.HOME:
+          setState(() {
+            screenView = const HomePage();
+          });
+          break;
+        case DrawerMenu.MyPlayList:
+          setState(() {
+            screenView = const MyPlayListPage();
+          });
+          break;
+        case DrawerMenu.Help:
+          setState(() {
+            screenView = const HelpPage();
+          });
+          break;
+        case DrawerMenu.Share:
+          setState(() {
+            screenView = const SharePage();
+          });
+          break;
+        case DrawerMenu.About:
+          setState(() {
+            screenView = const AboutPage();
+          });
+          break;
       }
     }
   }

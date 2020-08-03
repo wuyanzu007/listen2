@@ -15,7 +15,8 @@ class DrawerUserController extends StatefulWidget {
       this.screenMenu})
       : super(key: key);
 
-  final double drawerWidth;
+  //从double修改为int,double在scrollController中会丢失精度,影响抽屉在模拟器中的正常使用
+  final int drawerWidth;
   final Function(DrawerMenu) onDrawerCall;
   final Widget screenView;
   final Function(AnimationController) animationController;
@@ -46,10 +47,11 @@ class _DrawerUserControllerState extends State<DrawerUserController>
     iconAnimationController.animateTo(1.0,
         duration: const Duration(milliseconds: 0), curve: Curves.fastOutSlowIn);
     scrollController =
-        ScrollController(initialScrollOffset: widget.drawerWidth);
+        ScrollController(initialScrollOffset: widget.drawerWidth.toDouble());
     scrollController
       ..addListener(() {
         if (scrollController.offset <= 0) {
+          //偏移量为0,抽屉完全展开
           if (scrollOffset != 1.0) {
             setState(() {
               scrollOffset = 1.0;
@@ -66,7 +68,8 @@ class _DrawerUserControllerState extends State<DrawerUserController>
               (scrollController.offset * 100 / (widget.drawerWidth)) / 100,
               duration: const Duration(milliseconds: 0),
               curve: Curves.linear);
-        } else if (scrollController.offset <= widget.drawerWidth) {
+        } else if (scrollController.offset >= widget.drawerWidth) {
+          //偏移量等于抽屉宽度,抽屉完全关闭
           if (scrollOffset != 0.0) {
             setState(() {
               scrollOffset = 0.0;
@@ -87,7 +90,7 @@ class _DrawerUserControllerState extends State<DrawerUserController>
     await Future<dynamic>.delayed(const Duration(milliseconds: 300));
     widget.animationController(iconAnimationController);
     await Future<dynamic>.delayed(const Duration(milliseconds: 100));
-    scrollController.jumpTo(widget.drawerWidth);
+    scrollController.jumpTo(widget.drawerWidth.toDouble());
     setState(() {
       isSetDrawer = true;
     });
@@ -110,7 +113,7 @@ class _DrawerUserControllerState extends State<DrawerUserController>
             child: Row(
               children: <Widget>[
                 SizedBox(
-                  width: widget.drawerWidth,
+                  width: widget.drawerWidth.toDouble(),
                   height: MediaQuery.of(context).size.height,
                   child: AnimatedBuilder(
                     animation: iconAnimationController,
@@ -120,7 +123,7 @@ class _DrawerUserControllerState extends State<DrawerUserController>
                             scrollController.offset, 0.0, 0.0),
                         child: SizedBox(
                           height: MediaQuery.of(context).size.height,
-                          width: widget.drawerWidth,
+                          width: widget.drawerWidth.toDouble(),
                           child: HomeDrawer(
                             screenIndex: widget.screenMenu == null
                                 ? DrawerMenu.HOME
@@ -209,14 +212,16 @@ class _DrawerUserControllerState extends State<DrawerUserController>
 
   void onDrawerClick() {
     if (scrollController.offset != 0.0) {
+      // 偏移量不等于0 关闭抽屉
       scrollController.animateTo(
         0.0,
         duration: const Duration(milliseconds: 400),
         curve: Curves.fastOutSlowIn,
       );
     } else {
+      // 打开抽屉
       scrollController.animateTo(
-        widget.drawerWidth,
+        widget.drawerWidth.toDouble(),
         duration: const Duration(milliseconds: 400),
         curve: Curves.fastOutSlowIn,
       );

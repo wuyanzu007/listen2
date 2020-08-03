@@ -22,17 +22,17 @@ class HomeDrawer extends StatefulWidget {
 class _HomeDrawerState extends State<HomeDrawer> {
   List<DrawerMenuModel> drawerMenuList = <DrawerMenuModel>[
     DrawerMenuModel(
-        menu: DrawerMenu.HOME, labelName: 'Home', icon: Icon(Icons.home)),
+        menu: DrawerMenu.HOME, labelName: '首页', icon: Icon(Icons.home)),
     DrawerMenuModel(
-        menu: DrawerMenu.FeedBack,
-        labelName: 'FeedBack',
-        icon: Icon(Icons.message)),
+        menu: DrawerMenu.MyPlayList,
+        labelName: '我的歌单',
+        icon: Icon(Icons.playlist_play)),
     DrawerMenuModel(
-        menu: DrawerMenu.Help, labelName: 'Help', icon: Icon(Icons.help)),
+        menu: DrawerMenu.Help, labelName: '帮助', icon: Icon(Icons.help)),
     DrawerMenuModel(
-        menu: DrawerMenu.Share, labelName: 'Share', icon: Icon(Icons.share)),
+        menu: DrawerMenu.Share, labelName: '分享', icon: Icon(Icons.share)),
     DrawerMenuModel(
-        menu: DrawerMenu.About, labelName: 'About', icon: Icon(Icons.info)),
+        menu: DrawerMenu.About, labelName: '关于', icon: Icon(Icons.info)),
   ];
 
   @override
@@ -215,7 +215,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
   }
 }
 
-enum DrawerMenu { HOME, FeedBack, Help, Share, About }
+enum DrawerMenu { HOME, MyPlayList, Help, Share, About }
 
 class DrawerMenuModel {
   DrawerMenuModel({this.labelName = '', this.icon, this.menu});
